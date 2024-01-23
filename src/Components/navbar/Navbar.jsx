@@ -3,6 +3,7 @@ import "./navbar.css"
 
 const Navbar = () => {
   return (
+    <div className="sticky">
     <div className='navbar'>
       <div className="navcontainer">
         <span className="logo">Omkar Hotels & Travellers</span>
@@ -11,6 +12,7 @@ const Navbar = () => {
             <button className='navButton'>Login</button>
         </div>
       </div>
+    </div>
     </div>
   )
 }

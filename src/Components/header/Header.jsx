@@ -7,7 +7,7 @@ import { useState } from "react"
 import 'react-date-range/dist/styles.css' // main css file
 import 'react-date-range/dist/theme/default.css' // theme css file
 import {format} from "date-fns"
-const Header = () => {
+const Header = (type) => {
   const [openDate, setOpenDate] = useState(false)
   const [date, setDate] = useState([
     {
@@ -22,9 +22,17 @@ const Header = () => {
     children: 0,
     room: 0
   })
+  const handleOption = (name, operation) => {
+    setOptions((prev)=>{
+      return{
+        ...prev,
+        [name]: operation === "i" ? options[name] + 1 : options[name] - 1,
+      };
+    });
+  };
   return (
     <div className="header">
-      <div className="headerContainer">
+      <div className={ type === "list" ? "headerContainer listMode" : "headerContainer"}>
         <div className="headerList">
             <div className="headerListItem active">
             <FontAwesomeIcon icon={faBed} />
@@ -51,7 +59,9 @@ const Header = () => {
             <span>Wifi</span>
             </div>
         </div>
-        <h1 className="headertitle">We provide best Travelling experience</h1>
+        {
+          type !== "list" &&
+        <><h1 className="headertitle">We provide best Travelling experience</h1>
         <p className="headerDesc">Get rewarded upto 20% or more with a free OmkarTours&Travellers account</p>
         <button className="headerbtn">Sign in / Register</button>
 
@@ -61,6 +71,7 @@ const Header = () => {
           
             <input type="text" placeholder="Where are you going?" className="headerSearchInput"/>
         </div>
+
         <div className="headerSearchItem">
           <FontAwesomeIcon icon={faCalendarDays} className="headerIcon"/>
           <span onClick={()=>setOpenDate(!openDate)} className="headerSearchText">{`${format(date[0].startDate, "MM/dd/yyyy")} to ${format(date[0].endDate, "MM/dd/yyyy")}`}</span>
@@ -72,22 +83,42 @@ const Header = () => {
              className="date"
           />}
         </div>
+
         <div className="headerSearchItem">
           <FontAwesomeIcon icon={faPerson} className="headerIcon"/>
-          <span className="headerSearchText">{`${options.adult} adult . ${options.children} children . ${options.room} room`}</span>
-          <div className="options">
+          <span onClick={()=> setOpenOptions(!openOptions)} className="headerSearchText">{`${options.adult} adult . ${options.children} children . ${options.room} room`}</span>
+         {openOptions && <div className="options">
             <div className="optionItem">
               <span className="optionText">Adult</span>
-              <button className="optionCounterButton">+</button>
+              <div class="optionCounter">
+              <button className="optionCounterButton" onClick={()=>handleOption("adult", "i")}>+</button>
               <span className="optionCounterNumber">1</span>
-              <button className="optionCounterButton">-</button>
+              <button className="optionCounterButton" onClick={()=>handleOption("adult", "d")}>-</button>
+              </div>
             </div>
-          </div>
+            <div className="optionItem">
+              <span className="optionText">Children</span>
+              <div class="optionCounter">
+              <button className="optionCounterButton" onClick={()=>handleOption("children", "i")}>+</button>
+              <span className="optionCounterNumber">1</span>
+              <button className="optionCounterButton" onClick={()=>handleOption("children", "d")}>-</button>
+              </div>
+            </div>
+            <div className="optionItem">
+              <span className="optionText">Room</span>
+              <div class="optionCounter">
+              <button className="optionCounterButton" onClick={()=>handleOption("room", "i")}>+</button>
+              <span className="optionCounterNumber">1</span>
+              <button className="optionCounterButton" onClick={()=>handleOption("room", "d")}>-</button>
+              </div>
+            </div>
+          </div>}
         </div>
         <div className="headerSearchItem">
           <button className="headerBtn">Search</button>
         </div>
         </div>
+        </>}
         
         
       </div>
